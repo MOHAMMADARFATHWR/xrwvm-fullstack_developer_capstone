@@ -1,0 +1,8 @@
+Project Name: Dealership Review & Management Web Application
+
+GitHub Repository: https://github.com/MOHAMMADARFATHWR/xrwvm-fullstack_developer_capstone.git
+
+Live Application (Contact Page): https://u1ep23cs094-8000.theianext-0-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/contact/
+
+Description:
+A full-stack web application built for an automotive dealership network as part of the IBM Full-Stack Software Developer Capstone Project. The project features a Django back-end with dynamic static pages (Home, About Us, Contact Us), user authentication, and microservices for dealership reviews and sentiment analysis.
