@@ -12,7 +12,8 @@ app.use(express.json());
 const reviews_data = JSON.parse(fs.readFileSync("data/reviews.json", 'utf8'));
 const dealerships_data = JSON.parse(fs.readFileSync("data/dealerships.json", 'utf8'));
 
-mongoose.connect("mongodb://mongo_db:27017/", { 'dbName': 'dealershipsDB' });
+const mongo_url = process.env.MONGO_URL || "mongodb://localhost:27017/";
+mongoose.connect(mongo_url, { 'dbName': 'dealershipsDB' });
 
 const Reviews = require('./review');
 const Dealerships = require('./dealership');
@@ -76,11 +77,8 @@ app.get('/fetchDealers/:state', async (req, res) => {
 // Express route to fetch dealer by ID
 app.get('/fetchDealer/:id', async (req, res) => {
   try {
-    const dealer = await Dealerships.findOne({ id: req.params.id });
-    if (!dealer) {
-      return res.status(404).json({ error: 'Dealer not found' });
-    }
-    res.json(dealer);
+    const documents = await Dealerships.find({ id: req.params.id });
+    res.json(documents);
   } catch (error) {
     res.status(500).json({ error: 'Error fetching dealer details' });
   }
@@ -88,7 +86,7 @@ app.get('/fetchDealer/:id', async (req, res) => {
 
 // Express route to insert a review
 app.post('/insert_review', express.raw({ type: 'application/json' }), async (req, res) => {
-  const data = JSON.parse(req.body);
+  const data = typeof req.body === 'string' || Buffer.isBuffer(req.body) ? JSON.parse(req.body) : req.body;
   const documents = await Reviews.find().sort({ id: -1 });
   let new_id = documents[0] ? documents[0]['id'] + 1 : 1;
 
